@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <title>Alpine.js Costs Calculator</title>
+</head>
+<body>
+    <div class="max-w-3xl mx-auto my-5" x-data="{costs: []}">
+        <h1 class="my-3 text-4xl text-center">Alpine.js Costs Calculator</h1>
+        <div
+            x-effect="console.log('title: ', title, 'price: ', price)"
+            x-init="title = 'Hello world!', price = 99"
+            class="shadow-md flex flex-row items-center p-3 rounded-xl relative"
+            x-data="{
+                title: '',
+                price: '',
+                dirty: false
+            }"
+        >
+            <template x-if="!title && dirty">
+                <label class="absolute left-10 top-0 px-1 font-bold bg-white text-red-700">Введите название!</label>
+            </template>
+            <input x-model="title" :class="!title && dirty && 'border-2 border-rose-600'" type="text" class="block w-2/3 rounded-md mr-2 border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600" placeholder="A cup of coffee">
+
+            <template x-if="!price && dirty">
+                <label class="absolute right-36 top-0 px-1 font-bold bg-white text-red-700">Укажите стоимость!</label>
+            </template>
+            <input x-model="price" :class="!price && dirty && 'border-2 border-rose-600'" type="number" class="block w-1/3 rounded-md mr-2 border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600" placeholder="30">$
+            <button @click="() => {
+                if(title && price) {
+                    costs.push({title, price, id: Date.now()})
+                    title = price = ''
+                    dirty = false
+                } else dirty = true
+            }" class="bg-green-600 ml-5 text-white py-2 px-5 ml-5 rounded-xl font-bold">Add</button>
+        </div>
+
+        <hr/>
+
+        <template x-for="cost in costs">
+            <div class="shadow-md flex flex-row items-center p-3 rounded-xl mt-3">
+                <input disabled x-model="cost.title" class="block w-2/3 rounded-md mr-2 border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600" >
+                <input disabled x-model="cost.price" class="block w-1/3 rounded-md mr-2 border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600">$
+                <button @click="costs = costs.filter(c => c.id !== cost.id)" class="bg-red-600 ml-5 text-white py-2 px-5 ml-5 rounded-xl font-bold">Delete</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
